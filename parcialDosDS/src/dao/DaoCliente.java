@@ -121,4 +121,26 @@ public class DaoCliente {
 
         return lista;
     }
+    
+    
+     public int buscarIdDelCiente(String nombre) throws SQLException {
+        int id = 0;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+       
+        String where = " WHERE Nombre = '" + nombre + "'";
+        String sql = "SELECT * FROM Clientes" + where;
+
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt("ID");
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            throw new SQLException();
+        }
+        return id;
+    }
 }

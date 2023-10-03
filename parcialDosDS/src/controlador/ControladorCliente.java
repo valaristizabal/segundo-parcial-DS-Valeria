@@ -39,4 +39,8 @@ public class ControladorCliente {
     public ArrayList<Cliente> listaCliente() throws SQLException {
         return dao.listaCliente();
     }
+        
+    public int buscarIdDelCiente(String nombre) throws SQLException {
+        return dao.buscarIdDelCiente(nombre);
+    }
 }
