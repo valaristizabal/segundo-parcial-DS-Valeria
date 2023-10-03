@@ -65,7 +65,7 @@ public class DaoCliente {
         return encontrado;
     }
 
-    public void editarCarrera(int id, String nombre, String email) throws SQLException {
+    public void editarCliente(int id, String nombre, String email) throws SQLException {
         PreparedStatement ps = null;
 
         try {

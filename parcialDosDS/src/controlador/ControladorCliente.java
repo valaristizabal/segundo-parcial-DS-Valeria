@@ -6,6 +6,7 @@ package controlador;
 
 import dao.DaoCliente;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import modelo.Cliente;
 
 /**
@@ -27,11 +28,15 @@ public class ControladorCliente {
         return dao.buscarCliente(id);
     }
     
-    public void editarCarrera(int id, String nombre, String email) throws SQLException {
-        dao.editarCarrera(id, nombre, email);
+    public void editarCliente(int id, String nombre, String email) throws SQLException {
+        dao.editarCliente(id, nombre, email);
     }
     
     public void eliminarCliente(int id) throws SQLException {
         dao.eliminarCliente(id);
+    }
+    
+    public ArrayList<Cliente> listaCliente() throws SQLException {
+        return dao.listaCliente();
     }
 }
