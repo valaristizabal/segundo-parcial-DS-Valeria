@@ -9,6 +9,8 @@ import controlador.ControladorPedidos;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -26,7 +28,7 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
      */
     ControladorPedidos controlador;
     ControladorCliente controladorCliente;
-
+    
     public VentanaGestionarPedidos() {
         initComponents();
         setLocationRelativeTo(this);
@@ -58,6 +60,9 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        txtIdConsulta = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         jMenuBar6 = new javax.swing.JMenuBar();
         jMenu6 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -71,8 +76,22 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
                 txtIdActionPerformed(evt);
             }
         });
+        txtId.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtIdKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdKeyTyped(evt);
+            }
+        });
 
         jLabel1.setText("Total:");
+
+        txtTotal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTotalKeyTyped(evt);
+            }
+        });
 
         jLabel3.setText("Cliente:");
 
@@ -119,6 +138,21 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tabla);
 
+        jButton1.setText("Filtrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        txtIdConsulta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdConsultaKeyTyped(evt);
+            }
+        });
+
+        jLabel4.setText("Ingrese el ID del cliente por el que desea filtrar");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -151,16 +185,26 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
                                 .addComponent(cmbxCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBuscar)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtIdConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46)
+                        .addComponent(jButton1)
+                        .addGap(76, 76, 76))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(93, 93, 93))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -179,9 +223,14 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
                             .addComponent(btnEditar)
                             .addComponent(btnEliminar)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(txtIdConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         jMenu6.setText("Más");
@@ -218,7 +267,7 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
-        VentanaGestionarClientes ventana = new VentanaGestionarClientes();
+        VentanaMenu ventana = new VentanaMenu();
         ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem6ActionPerformed
@@ -230,9 +279,11 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
         } else {
             try {
                 int id = Integer.parseInt(txtId.getText());
-                Pedidos cliente = controlador.buscarPedido(id);
-                txtTotal.setText(String.valueOf(cliente.getTotal()));
-
+                Pedidos pedido = controlador.buscarPedido(id);
+                txtTotal.setText(String.valueOf(pedido.getTotal()));
+                Cliente clienteEncontrado = controladorCliente.buscarCliente(pedido.getIdCliente());
+                cmbxCliente.setSelectedItem(clienteEncontrado.getNombre());
+                
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al buscar");
             }
@@ -254,10 +305,11 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
                 controlador.agregarPedido(pedido);
                 JOptionPane.showMessageDialog(null, "pedido agregado correctamente");
                 llenarTabla();
+                limpiarCampos();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al agregar");
             }
-
+            
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -268,10 +320,10 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
         } else {
             int id = Integer.parseInt(txtId.getText());
             int total = Integer.parseInt(txtTotal.getText());
-            String correo = txtCorreo.getText();
-
+            String nombreCliente = cmbxCliente.getSelectedItem().toString();
             try {
-                controlador.editarCliente(id, total, correo);
+                int idCliente = controladorCliente.buscarIdDelCiente(nombreCliente);
+                controlador.editarPedido(id, total, idCliente);
                 JOptionPane.showMessageDialog(null, "Cliente modificado");
                 limpiarCampos();
                 llenarTabla();
@@ -288,7 +340,7 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
         } else {
             int id = Integer.parseInt(txtId.getText());
             try {
-                controlador.eliminarCliente(id);
+                controlador.eliminarPedido(id);
                 JOptionPane.showMessageDialog(null, "cliente eliminado correctamente");
                 limpiarCampos();
                 llenarTabla();
@@ -297,6 +349,50 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if(txtIdConsulta.getText().isEmpty()){
+            llenarTabla();
+        } else {
+            int id = Integer.parseInt(txtIdConsulta.getText());
+            llenarTablaFiltro(id);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtIdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdKeyPressed
+
+    private void txtIdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Ingresar solo numeros");
+        }
+    }//GEN-LAST:event_txtIdKeyTyped
+
+    private void txtTotalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Ingresar solo numeros");
+        }
+    }//GEN-LAST:event_txtTotalKeyTyped
+
+    private void txtIdConsultaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdConsultaKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Ingresar solo numeros");
+        }
+    }//GEN-LAST:event_txtIdConsultaKeyTyped
 
     /**
      * @param args the command line arguments
@@ -332,28 +428,38 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
             }
         });
     }
-
+    
     public void cargarCombo() {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cmbxCliente.setModel(model);
-
-        ArrayList<Cliente> lista = new ArrayList<>();
-        model.addElement("Seleccione un cliente");
-
-        for (int i = 0; i < lista.size(); i++) {
-            String nombre = lista.get(i).getNombre();
-            model.addElement(nombre);
+        
+        try {
+            ArrayList<Cliente> lista = controladorCliente.listaCliente();
+            model.addElement("Seleccione un cliente");
+            
+            for (int i = 0; i < lista.size(); i++) {
+                String nombre = lista.get(i).getNombre();
+                model.addElement(nombre);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
-
+    
+    public void limpiarCampos() {
+        txtId.setText("");
+        txtTotal.setText("");
+        cmbxCliente.setSelectedIndex(0);
+    }
+    
     public void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel();
         try {
             ArrayList<Pedidos> lista = controlador.listaPedidos();
-
+            
             modelo.setColumnIdentifiers(new Object[]{"PedidoID", "FechaPedido", "Total", "Cliente"});
             tabla.setModel(modelo);
-
+            
             for (int i = 0; i < lista.size(); i++) {
                 Pedidos libro = lista.get(i);
                 modelo.addRow(new Object[]{
@@ -361,7 +467,7 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
                     libro.getFechaPedido(),
                     libro.getTotal(),
                     libro.getNombreCliente()
-
+                
                 });
             }
         } catch (SQLException ex) {
@@ -369,15 +475,40 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
         }
     }
 
+    
+    public void llenarTablaFiltro(int id) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        try {
+            ArrayList<Pedidos> lista = controlador.listaPedidosFiltrada(id);
+            
+            modelo.setColumnIdentifiers(new Object[]{"PedidoID", "FechaPedido", "Total", "cedulaCliente"});
+            tabla.setModel(modelo);
+            
+            for (int i = 0; i < lista.size(); i++) {
+                Pedidos libro = lista.get(i);
+                modelo.addRow(new Object[]{
+                    libro.getId(),
+                    libro.getFechaPedido(),
+                    libro.getTotal(),
+                    libro.getIdCliente()
+                
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JComboBox<String> cmbxCliente;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar6;
     private javax.swing.JMenuItem jMenuItem6;
@@ -385,6 +516,7 @@ public class VentanaGestionarPedidos extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabla;
     private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtIdConsulta;
     private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 }

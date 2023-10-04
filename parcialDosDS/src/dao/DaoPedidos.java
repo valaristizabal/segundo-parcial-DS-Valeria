@@ -19,13 +19,13 @@ import singleton.DatabaseSingleton;
  * @author val
  */
 public class DaoPedidos {
+
     private Connection con;
 
     public DaoPedidos() {
         con = DatabaseSingleton.getInstance().getConnection();
     }
-    
-    
+
     public void agregarPedido(Pedidos pedido) throws SQLException {
         try {
             PreparedStatement ps = null;
@@ -44,13 +44,12 @@ public class DaoPedidos {
         }
     }
 
-    
     public Pedidos buscarPedido(int id) throws SQLException {
         Pedidos productoEncontrado = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String where = " WHERE id = '" + id + "'";
+        String where = " WHERE PedidoID = '" + id + "'";
         String sql = "SELECT * FROM Pedidos" + where;
 
         try {
@@ -60,7 +59,7 @@ public class DaoPedidos {
             while (rs.next()) {
                 String fechaPedido = rs.getString("FechaPedido");
                 int total = rs.getInt("Total");
-                int idCliente = rs.getInt("ClienteID");
+                int idCliente = rs.getInt("IdCliente");
                 productoEncontrado = new Pedidos(id, fechaPedido, total, idCliente);
             }
         } catch (SQLException ex) {
@@ -71,13 +70,13 @@ public class DaoPedidos {
         return productoEncontrado;
     }
 
-     public void editarPedido(int id, int total, int ClienteID) throws SQLException {
+    public void editarPedido(int id, int total, int ClienteID) throws SQLException {
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement("UPDATE Pedidos SET Total=?, IdCliente=? WHERE PedidoID=?");
             ps.setInt(1, total);
             ps.setInt(2, ClienteID);
-            ps.setInt(3,id);
+            ps.setInt(3, id);
             ps.execute();
 
         } catch (SQLException ex) {
@@ -86,12 +85,11 @@ public class DaoPedidos {
         }
     }
 
-
     public void eliminarPedido(int id) throws SQLException {
         PreparedStatement ps = null;
 
         try {
-            ps = con.prepareStatement("DELETE FROM Pedidos WHERE id= '" + id + "'");
+            ps = con.prepareStatement("DELETE FROM Pedidos WHERE PedidoID = '" + id + "'");
             ps.setInt(1, id);
             ps.execute();
         } catch (SQLException ex) {
@@ -99,8 +97,8 @@ public class DaoPedidos {
             throw new SQLException();
         }
     }
-    
-        public ArrayList<Pedidos> listaPedidos() throws SQLException {
+
+    public ArrayList<Pedidos> listaPedidos() throws SQLException {
         ArrayList<Pedidos> lista = new ArrayList<>();
         try {
             PreparedStatement ps = null;
@@ -108,7 +106,7 @@ public class DaoPedidos {
 
             String sql = "SELECT p.PedidoID, p.FechaPedido, p.Total, c.Nombre AS nombreCliente "
                     + "FROM pedidos p "
-                    + "INNER JOIN clientes c ON p.ClienteId = c.id";
+                    + "INNER JOIN clientes c ON p.IdCliente = c.id";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
@@ -129,5 +127,33 @@ public class DaoPedidos {
 
         return lista;
     }
-    
+
+    public ArrayList<Pedidos> listaPedidosFiltrada(int idCliente) throws SQLException {
+        ArrayList<Pedidos> lista = new ArrayList<>();
+        try {
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            String sql = "SELECT * FROM pedidos WHERE IdCliente = " + idCliente;
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("PedidoID");
+                String Fecha = rs.getString("FechaPedido");
+                int total = rs.getInt("Total");
+                
+
+                Pedidos pedidos = new Pedidos(id, Fecha, total, idCliente);
+                lista.add(pedidos);
+            }
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            throw new SQLException();
+        }
+
+        return lista;
+    }
+
 }

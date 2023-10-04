@@ -55,7 +55,7 @@ public class DaoCliente {
             while (rs.next()) {
                 String nombre = rs.getString("Nombre");
                 String correo = rs.getString("Email");
-                encontrado = new Cliente(nombre, correo);
+                encontrado = new Cliente(id, nombre, sql);
             }
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());

@@ -39,4 +39,8 @@ public class ControladorPedidos {
     public ArrayList<Pedidos> listaPedidos() throws SQLException {
         return dao.listaPedidos();
     }
+    
+    public ArrayList<Pedidos> listaPedidosFiltrada(int idCliente) throws SQLException {
+        return dao.listaPedidosFiltrada(idCliente);
+    }
 }
